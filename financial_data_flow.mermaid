@@ -1,0 +1,65 @@
+flowchart TD
+    Start[lists of strings] -->|fetch_statement| Income2Y[income_data_2_years]
+    
+    Income2Y -->|count_problematic_entries| EDA1[EDA]
+    
+    Income2Y -->|sort_by_symbol_then_date| IncomeSorted[income_sorted]
+    
+    IncomeSorted -->|compute_log_change| IncomeLog[income_log_change]
+    
+    IncomeLog -->|count_zeros_nans_logchg| EDA2[EDA]
+    
+    IncomeLog -->|add_symbol_date| IncomeSymbol[income_symbol_date_added]
+    
+    IncomeSymbol -->|filter_by_common_pairs| IncomeOverlap[income_post_nans_overlapped]
+    
+    IncomeOverlap -->|sort_all_financials| IncomeOverlapSort[income_post_nans_overlapped_sorted]
+    
+    IncomeOverlapSort -->|check_alignment| EDA3[EDA]
+    
+    IncomeOverlapSort -->|outlier_check_1| EDA4[EDA]
+    
+    IncomeOverlapSort -->|drop_high_zero_columns| IncomeAfterDrop[income_after_feature_drop]
+    
+    IncomeAfterDrop -->|outlier_check_1| EDA5[EDA]
+    
+    IncomeAfterDrop -->|drop_outlier_rows| IncomeAfterOut[income_after_outlier_drop]
+    
+    IncomeAfterOut -->|align_dfs_on_symbol_date| IncomeAlign[income_aligned]
+    
+    IncomeAlign -->|standardize_dataframe| IncomeStd[income_after_outlier_drop_standardized]
+    
+    IncomeAlign -->|run_statement_univariate| Merged[merged_income]
+    
+    Merged -->|select_significant_features| SelIncome[selected_income]
+    
+    SelIncome --> Combine[combined_selected_features]
+    SelBalance[selected_balance] --> Combine
+    SelCash[selected_cashflow] --> Combine
+    Combine -->|output| Combined[combined_selected_line_items]
+    
+    SelIncome -->|run_pca| IncomePCA[income_df_pca]
+    
+    IncomePCA --> CombPCA[combined_pca_dfs]
+    BalancePCA[balance_df_pca] --> CombPCA
+    CashPCA[cashflow_df_pca] --> CombPCA
+    CombPCA -->|output| CombinedPCA[combined_pca_df]
+    
+    Combined -->|regress_log_pe_on_pca| RegOut1[regression output]
+    
+    CombinedPCA -->|regress_og_pe_on_pca| RegOut2[regression output]
+    
+    style EDA1 fill:#ffebee
+    style EDA2 fill:#ffebee
+    style EDA3 fill:#ffebee
+    style EDA4 fill:#ffebee
+    style EDA5 fill:#ffebee
+    style RegOut1 fill:#c8e6c9
+    style RegOut2 fill:#c8e6c9
+    style SelBalance fill:#e0e0e0
+    style SelCash fill:#e0e0e0
+    style BalancePCA fill:#e0e0e0
+    style CashPCA fill:#e0e0e0
+    style Combine fill:#fff3cd
+    style CombPCA fill:#fff3cd
+    style IncomeStd fill:#d1c4e9

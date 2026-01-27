@@ -1,0 +1,78 @@
+graph TD
+    Start[lists of strings] --> A[fetch_statement]
+    A --> B[income_data_2_years]
+    
+    B --> C1[count_problematic_entries]
+    C1 --> EDA1[EDA ❌]
+    
+    B --> D[sort_by_symbol_then_date]
+    D --> E[income_sorted]
+    
+    E --> F[compute_log_change]
+    F --> G[income_log_change]
+    
+    G --> H1[count_zeros_nans_logchg]
+    H1 --> EDA2[EDA ❌]
+    
+    G --> I[add_symbol_date]
+    I --> J[income_symbol_date_added]
+    
+    J --> K[filter_by_common_pairs]
+    K --> L[income_post_nans_overlapped]
+    
+    L --> M[sort_all_financials]
+    M --> N[income_post_nans_overlapped_sorted]
+    
+    N --> O1[check_alignment]
+    O1 --> EDA3[EDA ❌]
+    
+    N --> P1[outlier_check_1]
+    P1 --> EDA4[EDA ❌]
+    
+    N --> Q[drop_high_zero_columns]
+    Q --> R[income_after_feature_drop]
+    
+    R --> S1[outlier_check_1]
+    S1 --> EDA5[EDA ❌]
+    
+    R --> T[drop_outlier_rows]
+    T --> U[income_after_outlier_drop]
+    
+    U --> V[align_dfs_on_symbol_date]
+    V --> W[income_aligned]
+    
+    W --> X[standardize_dataframe]
+    X --> Y[income_after_outlier_drop_standardized]
+    
+    W --> Z[run_statement_univariate]
+    Z --> AA[merged_income]
+    
+    AA --> AB[select_significant_features]
+    AB --> AC[selected_income]
+    
+    AC --> AD[combined_selected_features]
+    Balance[selected_balance] --> AD
+    Cash[selected_cashflow] --> AD
+    AD --> AE[combined_selected_line_items]
+    
+    AC --> AF[run_pca]
+    AF --> AG[income_df_pca]
+    
+    AG --> AH[combined_pca_dfs]
+    BalancePCA[balance_df_pca] --> AH
+    CashPCA[cashflow_df_pca] --> AH
+    AH --> AI[combined_pca_df]
+    
+    AE --> AJ[regress_log_pe_on_pca]
+    AJ --> Output1[regression output]
+    
+    AI --> AK[regress_og_pe_on_pca]
+    AK --> Output2[regression output]
+    
+    style EDA1 fill:#ff6b6b
+    style EDA2 fill:#ff6b6b
+    style EDA3 fill:#ff6b6b
+    style EDA4 fill:#ff6b6b
+    style EDA5 fill:#ff6b6b
+    style Output1 fill:#51cf66
+    style Output2 fill:#51cf66

@@ -1,0 +1,112 @@
+graph TD
+    Start[lists of strings] --> F1[[fetch_statement]]
+    F1 --> D1[income_data_2_years]
+    
+    D1 --> F2[[count_problematic_entries]]
+    F2 --> EDA1[EDA ❌]
+    
+    D1 --> F3[[sort_by_symbol_then_date]]
+    F3 --> D2[income_sorted]
+    
+    D2 --> F4[[compute_log_change]]
+    F4 --> D3[income_log_change]
+    
+    D3 --> F5[[count_zeros_nans_logchg]]
+    F5 --> EDA2[EDA ❌]
+    
+    D3 --> F6[[add_symbol_date]]
+    F6 --> D4[income_symbol_date_added]
+    
+    D4 --> F7[[filter_by_common_pairs]]
+    F7 --> D5[income_post_nans_overlapped]
+    
+    D5 --> F8[[sort_all_financials]]
+    F8 --> D6[income_post_nans_overlapped_sorted]
+    
+    D6 --> F9[[check_alignment]]
+    F9 --> EDA3[EDA ❌]
+    
+    D6 --> F10[[outlier_check_1]]
+    F10 --> EDA4[EDA ❌]
+    
+    D6 --> F11[[drop_high_zero_columns]]
+    F11 --> D7[income_after_feature_drop]
+    
+    D7 --> F12[[outlier_check_1]]
+    F12 --> EDA5[EDA ❌]
+    
+    D7 --> F13[[drop_outlier_rows]]
+    F13 --> D8[income_after_outlier_drop]
+    
+    D8 --> F14[[align_dfs_on_symbol_date]]
+    F14 --> D9[income_aligned]
+    
+    D9 --> F15[[standardize_as_a_check]]
+    F15 --> D10[income_after_outlier_drop_standardized]
+    
+    D10 --> F16[[pickle]]
+    F16 --> D11[income_after_outlier_drop_standardized]
+    
+    D11 --> F17[[run_statement_univariate]]
+    F17 --> D12[merged_income]
+    
+    D12 --> F18[[select_significant_features]]
+    F18 --> D13[selected_income]
+    
+    D13 --> F19[[combined_selected_features]]
+    ExtBal[selected_balance] --> F19
+    ExtCash[selected_cashflow] --> F19
+    F19 --> D14[combined_selected_line_items]
+    
+    D13 --> F20[[run_pca]]
+    F20 --> D15[income_df_pca]
+    
+    D15 --> F21[[combined_pca_dfs]]
+    ExtBalPCA[balance_df_pca] --> F21
+    ExtCashPCA[cashflow_df_pca] --> F21
+    F21 --> D16[combined_pca_df]
+    
+    D14 --> F22[[regress_log_pe_on_pca]]
+    F22 --> OUT1[regression output]
+    
+    D16 --> F23[[regress_log_pe_on_pca]]
+    F23 --> OUT2[regression output]
+    
+    D11 --> F24[[income_after_outlier_drop_standardized]]
+    F24 --> D17[income_after_outlier_drop_standardized.pkl]
+    
+    D10 --> F25[[compute_latent_factors]]
+    F25 --> D18[income_latent]
+    
+    style EDA1 fill:#ff6b6b
+    style EDA2 fill:#ff6b6b
+    style EDA3 fill:#ff6b6b
+    style EDA4 fill:#ff6b6b
+    style EDA5 fill:#ff6b6b
+    style OUT1 fill:#51cf66
+    style OUT2 fill:#51cf66
+    style F1 fill:#4dabf7
+    style F2 fill:#4dabf7
+    style F3 fill:#4dabf7
+    style F4 fill:#4dabf7
+    style F5 fill:#4dabf7
+    style F6 fill:#4dabf7
+    style F7 fill:#4dabf7
+    style F8 fill:#4dabf7
+    style F9 fill:#4dabf7
+    style F10 fill:#4dabf7
+    style F11 fill:#4dabf7
+    style F12 fill:#4dabf7
+    style F13 fill:#4dabf7
+    style F14 fill:#4dabf7
+    style F15 fill:#4dabf7
+    style F16 fill:#4dabf7
+    style F17 fill:#4dabf7
+    style F18 fill:#4dabf7
+    style F19 fill:#4dabf7
+    style F20 fill:#4dabf7
+    style F21 fill:#4dabf7
+    style F22 fill:#4dabf7
+    style F23 fill:#4dabf7
+    style F24 fill:#4dabf7
+    style F25 fill:#4dabf7
